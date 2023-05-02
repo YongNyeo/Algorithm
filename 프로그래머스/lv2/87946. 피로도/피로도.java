@@ -2,19 +2,15 @@ import java.util.*;
 class Solution {
     static int mx = 0;
     public void dfs(boolean[] visited, int[][] dungeons,int p,int cnt){
-        // System.out.println(dungeons.length);        
         for (int i=0;i<dungeons.length;i++){
             if (visited[i]==false && p>=dungeons[i][0]){
                 visited[i]=true;
                 cnt+=1;
                 mx = Math.max(cnt,mx);
                 p = p-dungeons[i][1];
-//                 System.out.println(p);
-//                 System.out.println(i);
-//                 System.out.println(cnt);        
-                
-                
+                //재귀 순행
                 dfs(visited,dungeons,p,cnt);
+                //재귀 역행
                 visited[i] = false;
                 cnt-=1;
                 p = p+dungeons[i][1];
