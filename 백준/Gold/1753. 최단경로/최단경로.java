@@ -16,6 +16,7 @@ class Main {
         int e = Integer.parseInt(s[1]);
         int[] distance = new int[v + 1];
         Arrays.fill(distance, INF);
+        boolean[]visited = new boolean[v+1];
         ArrayList<Node>[] graph = new ArrayList[v + 1];
         for (int i = 0; i < graph.length; i++) graph[i] = new ArrayList<>();
         String s1 = bf.readLine();
@@ -33,10 +34,10 @@ class Main {
         distance[start] = 0;
         while (!pq.isEmpty()) {
             Node x = pq.poll();
-            if (distance[x.num]<x.weight) continue;
+            if (!visited[x.num]) visited[x.num] = true;
 
             for (Node k : graph[x.num]) {
-                if (distance[k.num] > distance[x.num] + k.weight) {
+                if (!visited[k.num]&&distance[k.num] > distance[x.num] + k.weight) {
                     distance[k.num] = distance[x.num] + k.weight;
                     pq.offer(new Node(k.num, distance[k.num]));
                 }
