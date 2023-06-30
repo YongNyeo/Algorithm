@@ -1,4 +1,4 @@
-import java.io.BufferedReader;
+import java.io.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -14,6 +14,8 @@ class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
@@ -46,9 +48,12 @@ class Main {
         }
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                System.out.print(map[i][j]+" ");
+                bw.write(String.valueOf(map[i][j])+" ");
             }
-            System.out.println();
+            bw.newLine();
         }
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
