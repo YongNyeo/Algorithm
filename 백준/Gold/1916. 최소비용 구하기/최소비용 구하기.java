@@ -1,69 +1,93 @@
-import java.io.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 class Main {
 
-    static int n, m, k;
-    static String[][] map;
-    static int[] dx = {1, -1, 0, 0}; //남북서동
-    static int[] dy = {0, 0, -1, 1};
-
     public static void main(String[] args) throws IOException {
+
+        /**
+         * 5
+         * 8
+         * 1 2 2
+         * 1 3 3
+         * 1 4 1
+         * 1 5 10
+         * 2 4 2
+         * 3 4 1
+         * 3 5 1
+         * 4 5 3
+         * 1 5
+         */
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        StringTokenizer s1 = new StringTokenizer(br.readLine());
-        StringTokenizer s2 = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(s1.nextToken());
-        int m = Integer.parseInt(s2.nextToken());
-        boolean[] visited = new boolean[n + 1];
-        int[] dist = new int[n + 1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        ArrayList<Node>[] graph = new ArrayList[n + 1];
+        int n = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i <= n; i++) {
+        ArrayList<Bus>[] graph = new ArrayList[n+1];
+        boolean []visited = new boolean[n+1];
+        for (int i = 1; i <= n; i++) {
             graph[i] = new ArrayList<>();
         }
+
         for (int i = 0; i < m; i++) {
-            StringTokenizer s3 = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(s3.nextToken());
-            int e = Integer.parseInt(s3.nextToken());
-            int w = Integer.parseInt(s3.nextToken());
-            graph[s].add(new Node(e, w));
+            StringTokenizer st = new StringTokenizer(br.readLine());
+
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+
+            graph[a].add(new Bus(b, c));
+
         }
-        StringTokenizer s4 = new StringTokenizer(br.readLine());
-        int s_x = Integer.parseInt(s4.nextToken());
-        int e_x = Integer.parseInt(s4.nextToken());
+        StringTokenizer sk = new StringTokenizer(br.readLine());
 
-        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.w, o2.w));
+        int start = Integer.parseInt(sk.nextToken());
+        int end = Integer.parseInt(sk.nextToken());
 
-        pq.add(new Node(s_x, 0));
-        dist[s_x] = 0;
+        Queue<Bus> pq = new PriorityQueue<>();
+        pq.add(new Bus(start,0));
+
+
+        int []dist = new int[n+1];
+        Arrays.fill(dist,999999999);
+        dist[start] = 0;
+
         while (!pq.isEmpty()) {
-            Node a = pq.poll();
-             if (visited[a.n]) {
-                continue;
+            Bus poll = pq.poll();
+            if (visited[poll.end]) continue;
+             if (poll.end == end) {
+                break;
             }
-            visited[a.n] = true;
-            for (Node node : graph[a.n]) {
-                if (!visited[node.n] && dist[node.n] > dist[a.n] + node.w) {
-                    dist[node.n] = dist[a.n] + node.w;
-                    pq.add(new Node(node.n, dist[node.n]));
+            visited[poll.end] = true;
+
+            for (Bus node : graph[poll.end]) {
+                if (!visited[node.end] && dist[node.end] > dist[poll.end] + node.dist) {
+                    dist[node.end] = dist[poll.end] + node.dist;
+                    pq.add(new Bus(node.end, dist[node.end]));
                 }
             }
         }
-        System.out.println(dist[e_x]);
-
-    }
-
-    public static class Node {
-        int n;
-        int w;
-
-        public Node(int n, int w) {
-            this.n = n;
-            this.w = w;
-        }
+        System.out.println(dist[end]);
 
     }
 }
+
+class Bus implements Comparable<Bus>{
+
+    public int end;
+    public int dist;
+
+    public Bus(int end, int dist) {
+        this.end = end;
+        this.dist = dist;
+    }
+
+    @Override
+    public int compareTo(Bus o) {
+        return this.dist - o.dist;
+    }
+}
+
