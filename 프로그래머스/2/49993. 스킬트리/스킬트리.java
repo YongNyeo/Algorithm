@@ -10,7 +10,6 @@ class Solution {
         Character first = skill.charAt(0);
         for (int i=1;i<skill.length();i++){
             map.put(skill.charAt(i),skill.charAt(i-1));
-            // System.out.println(skill.charAt(i)+" "+skill.charAt(i-1));
         }
         
         for (int i=0;i<skill_trees.length;i++){
@@ -34,7 +33,6 @@ class Solution {
                     visited[c-65] = true;
                 }    
             }
-            System.out.println(i+" "+answer);
         }
         
         return answer;
